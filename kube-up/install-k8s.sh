@@ -55,6 +55,6 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 sudo wget -O ${HOME}/flannel.yaml "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
 
 # download init script for control plane node
-sudo wget -O ${HOME}/initialize-cluster.sh https://raw.githubusercontent.com/chadmcrowell/cka/main/00-prerequisites/initialize-cluster.sh
+sudo wget -O ${HOME}/kubeadm-init.sh https://raw.githubusercontent.com/chadmcrowell/test/main/kube-up/kubeadm-init.sh
 
-sudo chmod +x ${HOME}/initialize-cluster.sh
+sudo chmod +x ${HOME}/kubeadm-init.sh
