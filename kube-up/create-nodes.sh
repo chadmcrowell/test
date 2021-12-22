@@ -1,7 +1,7 @@
 #/bin/bash
 
 # api key can be found in Settings > Preferences > Security
-API_KEY="8PlmpsmOV5QjhGEPJE1S1XfXLeRZKikdbOjW0FImAvMQsz0Krs"
+API_KEY=""
 
 civo apikey add my_key $API_KEY
 

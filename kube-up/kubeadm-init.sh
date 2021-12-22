@@ -7,8 +7,7 @@ mkdir -p ~/.kube
 sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-# apply the cni
-# workaround due to: https://github.com/weaveworks/weave/issues/3927
+# apply flannel cni
 kubectl apply -f ${HOME}/flannel.yaml
 rm ${HOME}/flannel.yaml
 
