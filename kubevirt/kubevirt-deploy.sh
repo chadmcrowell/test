@@ -10,7 +10,7 @@ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${VERSI
 kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/kubevirt-cr.yaml
 
 # check for deployed status
-kubectl get all -n kubevirt
+kubectl get kubevirt -n kubevirt -w
 
 # deploy the latest release of Containerized Data Importer(CDI) using its Operator
 # https://github.com/kubevirt/containerized-data-importer#deploy-it
@@ -18,12 +18,12 @@ export VERSION=$(curl -s https://github.com/kubevirt/containerized-data-importer
 kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/$VERSION/cdi-operator.yaml
 kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/$VERSION/cdi-cr.yaml
 
-# enable dv feature gate
+# enable dv feature gate - not needed as of 12/20/2021
 # https://kubevirt.io/2018/CDI-DataVolumes.html
-kubectl create configmap kubevirt-config --from-literal feature-gates=DataVolumes -n kube-system
+# kubectl create configmap kubevirt-config --from-literal feature-gates=DataVolumes -n kube-system
 
 # check for deployed status
-kubectl get cdi cdi -n cdi
+kubectl get cdi cdi -n cdi -w
 
 # check pods
 kubectl get pods -n cdi
@@ -37,11 +37,11 @@ chmod +x virtctl
 sudo install virtctl /usr/local/bin
 
 # create pvc
-cat <<EOF > pv.yml
+cat <<EOF > pv1.yml
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: data-pv
+  name: data-pv1
 spec:
   capacity:
     storage: 2Gi
@@ -50,13 +50,16 @@ spec:
   hostPath:
     path: "/mnt/data"
 EOF
-kubectl create -f pv.yml
+kubectl create -f pv1.yml
 
 # get pv
 kubectl get pv
 
 # create vm
 kubectl apply -f ~/test/kubevirt/alpine-vm.yml
+
+# get vm
+kubectl get vm
 
 # start vm
 virtctl start vm-alpine-datavolume
@@ -68,4 +71,4 @@ kubectl get vmi -w
 kubectl get vm
 
 # get dataVolume
-kubetl get dv
+kubectl get dv

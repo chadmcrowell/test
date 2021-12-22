@@ -1,0 +1,51 @@
+{{ $count := .Values.virtual_machines2.count | int }}
+
+{{ range $i, $e := until $count }}
+
+{{ $counter := add $i 1}}
+
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    kubevirt.io/vm: {{ .Values.virtual_machines2.name }}-{{ $counter }}
+  name: {{ .Values.virtual_machines2.name }}-{{ $counter }}
+spec:
+  dataVolumeTemplates:
+  - metadata:
+      creationTimestamp: null
+      name: {{ .Values.dataVolumeTemplates.dv_name }}-{{ $counter }}
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+      source:
+        http:
+          url: {{ .Values.virtual_machines2.image }}
+  running: false
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: "{{ .Values.virtual_machines2.name }}-{{ $counter }}"
+    spec:
+      domain:
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: {{ .Values.dataVolumeTemplates.disk_name }}-{{ $counter }}
+        resources:
+          requests:
+            memory: {{ .Values.virtual_machines2.memory}}
+            cpu: {{ .Values.virtual_machines2.cpu}}
+      terminationGracePeriodSeconds: 0
+      volumes:
+      - dataVolume:
+          name: {{ .Values.dataVolumeTemplates.dv_name }}-{{ $counter }}
+        name: {{ .Values.dataVolumeTemplates.disk_name }}-{{ $counter }}
+
+---
+{{ end }}
