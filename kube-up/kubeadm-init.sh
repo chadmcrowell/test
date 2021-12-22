@@ -10,7 +10,3 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 # apply flannel cni
 kubectl apply -f ${HOME}/flannel.yaml
 sudo rm ${HOME}/flannel.yaml
-
-echo
-echo "### COPY AND PASTE THIS IN THE WORKER NODE ###"
-sudo kubeadm token create --print-join-command --ttl 0
