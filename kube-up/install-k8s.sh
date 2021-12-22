@@ -43,14 +43,6 @@ sudo apt-get install -y kubelet=${KUBE_VERSION}-00 kubeadm=${KUBE_VERSION}-00 ku
 # hold at current versions
 sudo apt-mark hold kubelet kubeadm kubectl
 
-# initialize the cluster
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
-
-# set config and permissions
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
 # download yaml flannel 
 sudo wget -O ${HOME}/flannel.yaml "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
 
