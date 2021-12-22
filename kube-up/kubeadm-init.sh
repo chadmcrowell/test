@@ -1,8 +1,6 @@
-KUBE_VERSION=1.21.0
-
 # initialize the cluster
 # sudo rm /root/.kube/config
-sudo kubeadm init --kubernetes-version=${KUBE_VERSION} --ignore-preflight-errors=NumCPU --skip-token-print
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 
 # set config and permissions
 mkdir -p ~/.kube
@@ -12,7 +10,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 # apply the cni
 # workaround due to: https://github.com/weaveworks/weave/issues/3927
 kubectl apply -f ${HOME}/flannel.yaml
-rm flannel.yaml
+rm ${HOME}/flannel.yaml
 
 echo
 echo "### COPY AND PASTE THIS IN THE WORKER NODE ###"

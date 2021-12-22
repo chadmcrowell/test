@@ -45,8 +45,3 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 # download yaml flannel 
 sudo wget -O ${HOME}/flannel.yaml "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
-
-# download init script for control plane node
-sudo wget -O ${HOME}/kubeadm-init.sh https://raw.githubusercontent.com/chadmcrowell/test/main/kube-up/kubeadm-init.sh
-
-sudo chmod +x ${HOME}/kubeadm-init.sh
