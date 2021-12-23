@@ -1,0 +1,50 @@
+{{ $values := $.Values }}
+{{ $replicaCount := .Values.replicaCount | int }}
+
+{{ range $i, $e := until $replicaCount }}
+
+{{ $counter := add $i 1}}
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    kubevirt.io/vm: "{{ $values.basename }}-{{ $counter }}"
+  name: "{{ $values.basename }}-{{ $counter }}"
+spec:
+  dataVolumeTemplates:
+  - metadata:
+      creationTimestamp: null
+      name: {{ $values.basename }}-data-volume-{{ $counter }}
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ $values.dataVolumeTemplates.resources.requests.storage }}
+      source:
+        http:
+          url: {{ $values.dataVolumeTemplates.source.url }}
+  running: false
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: "{{ $values.basename }}-{{ $counter }}"
+    spec:
+      domain:
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: {{ $values.basename }}-data-volume-{{ $counter }}
+        resources:
+          requests:
+            memory: {{ $values.resources.requests.memory }}
+            cpu: {{ $values.resources.requests.cpu }}
+      terminationGracePeriodSeconds: 0
+      volumes:
+      - dataVolume:
+          name: {{ $values.basename }}-data-volume-{{ $counter }}
+        name: {{ $values.basename }}-data-volume-{{ $counter }}
+---
+{{ end }}

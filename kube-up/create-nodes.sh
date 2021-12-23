@@ -31,3 +31,4 @@ civo instance show k8s1 | grep "Public IP"
 
 # show k8s2 public ip
 civo instance show k8s2 | grep "Public IP"
+
